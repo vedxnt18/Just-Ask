@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Video Stream</title>
+  <link rel="stylesheet" href="./assets/css/server.css">
+</head>
+<body>
+  <video id="localVideo" autoplay></video>
+
+  <div class="controls">
+    <button id="startButton">Start</button>
+    <button id="stopButton">Stop</button>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const localVideo = document.getElementById('localVideo');
+    const startButton = document.getElementById('startButton');
+    const stopButton = document.getElementById('stopButton');
+
+    let localStream;
+    let peerConnection;
+
+    startButton.addEventListener('click', start);
+    stopButton.addEventListener('click', stop);
+
+    const socket = io();
+
+    function start() {
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+          localStream = stream;
+          localVideo.srcObject = localStream;
+
+          socket.emit('startStream', 'room-1');
+        })
+        .catch(error => {
+          console.error('Error accessing media devices:', error);
+        });
+    }
+
+    function stop() {
+      if (localStream) {
+        localStream.getTracks().forEach(track => {
+          track.stop();
+        });
+        localStream = null;
+        localVideo.srcObject = null;
+      }
+
+      socket.emit('stopStream', 'room-1');
+    }
+
+    const configuration = {
+      iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+    };
+
+    socket.on('startStream', () => {
+      createPeerConnection();
+    });
+
+    socket.on('stopStream', () => {
+      if (peerConnection) {
+        peerConnection.close();
+        peerConnection = null;
+      }
+    });
+
+    function createPeerConnection() {
+      peerConnection = new RTCPeerConnection(configuration);
+
+      peerConnection.addEventListener('icecandidate', event => {
+        if (event.candidate) {
+          socket.emit('candidate', { candidate: event.candidate, room: 'room-1' });
+        }
+      });
+
+      if (localStream) {
+        localStream.getTracks().forEach(track => {
+          peerConnection.addTrack(track, localStream);
+        });
+      }
+    }
+  </script>
+</body>
+</html>
