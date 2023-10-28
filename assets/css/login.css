@@ -1,9 +1,9 @@
 
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f2f2f2;
+      background-color: #1C448E;
     }
 
     header {
@@ -66,4 +66,25 @@
     }
     .text-muted {
       color: #888;
+    }
+
+
+
+
+    /* Style for the back button */
+    .back-button {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: #1C448E;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Style for the back button on hover */
+    .back-button:hover {
+      background-color: #F4FDFF;
+      color: #1C448E;
     }

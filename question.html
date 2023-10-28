@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <!-- GOOGLE FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@800&family=Poppins:wght@300&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="./assets/css/form.css">
+</head>
+<body>
+
+    <!-- FORM -->
+    
+    <div class="full-landscape-form-container" id="form">
+        <h1>Connect with a Tutor</h1>
+        <form id="tutorForm">
+            <label for="question">Type your question here:</label>
+            <input type="text" id="question" name="question" placeholder="Your question...">
+
+            <label for="image">Upload an image of the question:</label>
+            <input type="file" id="image" name="image">
+
+            <label for="class">Select class:</label>
+            <select id="class" name="class">
+                <option value="5">Class 5</option>
+                <option value="6">Class 6</option>
+                <option value="7">Class 7</option>
+                <option value="8">Class 8</option>
+                <option value="9">Class 9</option>
+                <option value="10">Class 10</option>
+                <option value="11">Class 11</option>
+                <option value="12">Class 12</option>
+                <option value="engineering">Engineering</option>
+            </select>
+
+            <div class="button-container">
+                <button type="button" id="connectButton">Connect Tutor</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("connectButton").addEventListener("click", function() {
+            var question = document.getElementById("question").value;
+            var image = document.getElementById("image").value;
+            var selectedClass = document.getElementById("class").value;
+
+            if (question === "" || image === "" || selectedClass === "") {
+                alert("Please fill out the entire form before connecting to a tutor.");
+            } else {
+                // If the form is fully filled, you can proceed to connect to a tutor.
+                window.location.href = './server.html';
+            }
+        });
+    </script>
+</body>
+</html>
